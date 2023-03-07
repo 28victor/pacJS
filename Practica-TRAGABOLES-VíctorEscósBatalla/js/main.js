@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let pantalla = document.querySelector("#pantalla");
     let player = document.querySelector(".pl");
-    let target = document.querySelector(".target");
+    let boles = document.querySelector("div");
 
 
 
@@ -21,13 +21,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateBalls(amountBalls){
         //Creem una llista/array de boles buida
         let boles = [];
+        let color;
+        let top;
+        let left;
+
         //Bucle per generar el número de boles (amountBalls)
         for(let i=0; i<amountBalls; i++) {
-            boles[i] = document.createElement('div'); 
+            boles[i] = document.createElement("div");
+            document.body.appendChild(boles[i]);
+
+            boles[i].style.width = 30 + "px";
+            boles[i].style.height = 30 + "px";
+
+            boles[i].style.border = "solid black 2px";
+            boles[i].style.borderRadius = "100%";
+
+            color = Math.random() * (4 - 1) + 1;
+
+            if (Math.round(color) == 1) boles[i].style.backgroundColor = "yellow";
+            else if (Math.round(color) == 2) boles[i].style.backgroundColor = "green";
+            else if (Math.round(color) == 3) boles[i].style.backgroundColor = "red";
+            else if (Math.round(color) == 4) boles[i].style.backgroundColor = "blue";
+
+            left = Math.random() * ((pantalla.clientWidth - boles[i].clientWidth) - 0) + 0;
+            top = Math.random() * ((pantalla.clientHeight - boles[i].clientHeight) - 0) + 0;
+            boles[i].style.position = "absolute";
+            boles[i].style.top = top + "px";
+            boles[i].style.left = left + "px";
         }
+
+
         //Retornem la llista de boles generades (la farem servir després)
         return boles;
     }
+
+
+    
 
         //Controlem que al moure la caixa no marxi de pantalla
         function getLeftBoxPosition(x)
@@ -55,21 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return y;
         }
         
-    //Control de col·lisió
-    function detectarXoc()
-    {
-        if(
-            (player.offsetTop < target.offsetTop+target.clientHeight) && 
-            (player.offsetTop+player.clientHeight > target.offsetTop) &&
-            (player.offsetLeft+player.clientWidth > target.offsetLeft) &&
-            (player.offsetLeft < target.offsetLeft+target.clientWidth)
-        )
-        {
-            console.log("Xoc!");
-            target.remove();
-            alert("Victory!")
-        }     
-    }
+    // Control de col·lisió
+    // function detectarXoc()
+    // {
+    //     if(
+    //         (player.offsetTop < boles.offsetTop+boles.clientHeight) && 
+    //         (player.offsetTop+player.clientHeight > boles.offsetTop) &&
+    //         (player.offsetLeft+player.clientWidth > boles.offsetLeft) &&
+    //         (player.offsetLeft < boles.offsetLeft+boles.clientWidth)
+    //     )
+    //     {
+    //         console.log("Xoc!");
+    //         target.remove();
+    //         alert("Victory!")
+    //     }     
+    // }
     
     function controlarLimits(){
         if(player.offsetLeft < 0) 
@@ -88,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         player.style.left = getLeftBoxPosition(ev.clientX) + "px";
 
         player.style.top  = getTopBoxPosition(ev.clientY) + "px";
-        detectarXoc();
+        // detectarXoc();
     },false);
 
 },false);
